@@ -1,0 +1,85 @@
+{
+    "connection_key": "request",
+    "result": true,
+    "redis_key": "abcdefg",
+    "filepath": "/var/lib/aion/Data/rededge_sdc/abcdef.json",
+    "api_status_code": 200,
+    "runtime_session_id": "boi9ar543dg91ipdnspi099u231280ab0v8af0ew",
+    "business_partner": 101,
+    "service_label": "PAYMENT_TERMS",
+    "api_type": "reads",
+    "message": {
+        "PaymentTerms": [
+            {
+                "PaymentTerms": "0001",
+                "BaseDate": 31,
+                "BaseDateCalcAddMonth": 0,
+                "BaseDateCalcFixedDate": 31,
+                "PaymentDueDateCalcAddMonth": 1,
+                "PaymentDueDateCalcFixedDate": 31
+            }
+        ],
+        "PaymentTermsText": [
+            {
+                "PaymentTerms": "0001",
+                "Language": "JA",
+                "PaymentTermsName": "月末締め、翌月末払い"
+            }
+        ],
+        "PaymentTermsTexts": [
+            {
+                "PaymentTerms": "0001",
+                "Language": "JA",
+                "PaymentTermsName": "月末締め、翌月末払い"
+            },
+            {
+                "PaymentTerms": "0002",
+                "Language": "JA",
+                "PaymentTermsName": "月末締め、翌々月末払い"
+            },
+            {
+                "PaymentTerms": "0003",
+                "Language": "JA",
+                "PaymentTermsName": "月末締め、当月末払い"
+            },
+            {
+                "PaymentTerms": "0004",
+                "Language": "JA",
+                "PaymentTermsName": "15日締め、翌月末払い"
+            },
+            {
+                "PaymentTerms": "0005",
+                "Language": "JA",
+                "PaymentTermsName": "15日締め、翌々月末払い"
+            },
+            {
+                "PaymentTerms": "0006",
+                "Language": "JA",
+                "PaymentTermsName": "15日締め、当月末払い"
+            },
+            {
+                "PaymentTerms": "0007",
+                "Language": "JA",
+                "PaymentTermsName": "月末締め、翌月20日払い"
+            },
+            {
+                "PaymentTerms": "0008",
+                "Language": "JA",
+                "PaymentTermsName": "月末締め、翌々月20日払い"
+            }
+        ]
+    },
+    "api_schema": "DPFMPaymentTermsReads",
+    "accepter": [
+        "All"
+    ],
+    "deleted": false,
+    "sql_update_result": null,
+    "sql_update_error": "",
+    "subfunc_result": null,
+    "subfunc_error": "",
+    "exconf_result": null,
+    "exconf_error": "",
+    "api_processing_result": true,
+    "api_processing_error": ""
+}
