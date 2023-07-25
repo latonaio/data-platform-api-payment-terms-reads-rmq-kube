@@ -75,7 +75,7 @@ func callProcess(rmq *rabbitmq.RabbitmqClient, caller *dpfm_api_caller.DPFMAPICa
 	}
 
 	accepter := getAccepter(&input)
-	res, errs := caller.AsyncPaymentTermsReads(accepter, &input, &output, l)
+	res, errs := caller.AsyncReads(accepter, &input, &output, l)
 	if len(errs) != 0 {
 		for _, err := range errs {
 			l.Error(err)
@@ -103,7 +103,8 @@ func getAccepter(input *dpfm_api_input_reader.SDC) []string {
 
 	if accepter[0] == "All" {
 		accepter = []string{
-			"PaymentTerms", "PaymentTermsText", "PaymentTermsTexts",
+			"SinglePaymentTerms", "MultiplePaymentTerms", 
+			"PaymentTermsText", "PaymentTermsTexts",
 		}
 	}
 	return accepter

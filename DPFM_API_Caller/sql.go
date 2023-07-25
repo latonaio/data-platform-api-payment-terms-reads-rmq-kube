@@ -23,9 +23,13 @@ func (c *DPFMAPICaller) readSqlProcess(
 	var paymentTermsText *[]dpfm_api_output_formatter.PaymentTermsText
 	for _, fn := range accepter {
 		switch fn {
-		case "PaymentTerms":
+		case "SinglePaymentTerms":
 			func() {
-				paymentTerms = c.PaymentTerms(mtx, input, output, errs, log)
+				paymentTerms = c.SinglePaymentTerms(mtx, input, output, errs, log)
+			}()
+		case "MultiplePaymentTerms":
+			func() {
+				paymentTerms = c.MultiplePaymentTerms(mtx, input, output, errs, log)
 			}()
 		case "PaymentTermsText":
 			func() {
@@ -47,20 +51,55 @@ func (c *DPFMAPICaller) readSqlProcess(
 	return data
 }
 
-func (c *DPFMAPICaller) PaymentTerms(
+func (c *DPFMAPICaller) SinglePaymentTerms(
 	mtx *sync.Mutex,
 	input *dpfm_api_input_reader.SDC,
 	output *dpfm_api_output_formatter.SDC,
 	errs *[]error,
 	log *logger.Logger,
 ) *[]dpfm_api_output_formatter.PaymentTerms {
-	paymentTerms := input.PaymentTerms.PaymentTerms
-	baseDate := input.PaymentTerms.BaseDate
+	where := fmt.Sprintf("WHERE PaymentTerms = '%s'", input.PaymentTerms.PaymentTerms)
+
+	if input.PaymentTerms.IsMarkedForDeletion != nil {
+		where = fmt.Sprintf("%s\nAND IsMarkedForDeletion = %v", where, *input.PaymentTerms.IsMarkedForDeletion)
+	}
 
 	rows, err := c.db.Query(
 		`SELECT *
 		FROM DataPlatformMastersAndTransactionsMysqlKube.data_platform_payment_terms_payment_terms_data
-		WHERE (PaymentTerms, BaseDate) = (?, ?);`, paymentTerms, baseDate,
+		` + where + ` ORDER BY IsMarkedForDeletion ASC, PaymentMethod DESC, BaseDate DESC;`,
+	)
+	if err != nil {
+		*errs = append(*errs, err)
+		return nil
+	}
+	defer rows.Close()
+
+	data, err := dpfm_api_output_formatter.ConvertToPaymentTerms(rows)
+	if err != nil {
+		*errs = append(*errs, err)
+		return nil
+	}
+
+	return data
+}
+
+func (c *DPFMAPICaller) MultiplePaymentTerms(
+	mtx *sync.Mutex,
+	input *dpfm_api_input_reader.SDC,
+	output *dpfm_api_output_formatter.SDC,
+	errs *[]error,
+	log *logger.Logger,
+) *[]dpfm_api_output_formatter.PaymentTerms {
+
+	if input.PaymentTerms.IsMarkedForDeletion != nil {
+		where = fmt.Sprintf("%s\nAND IsMarkedForDeletion = %v", where, *input.PaymentTerms.IsMarkedForDeletion)
+	}
+
+	rows, err := c.db.Query(
+		`SELECT *
+		FROM DataPlatformMastersAndTransactionsMysqlKube.data_platform_payment_terms_payment_terms_data
+		` + where + ` ORDER BY IsMarkedForDeletion ASC, PaymentMethod DESC, BaseDate DESC;`,
 	)
 	if err != nil {
 		*errs = append(*errs, err)

@@ -5,25 +5,31 @@
 	"filepath": "/var/lib/aion/Data/rededge_sdc/abcdef.json",
 	"api_status_code": 200,
 	"runtime_session_id": "boi9ar543dg91ipdnspi099u231280ab0v8af0ew",
-	"business_partner": 101,
+	"business_partner": null,
 	"service_label": "PAYMENT_TERMS",
 	"api_type": "reads",
 	"PaymentTerms": {
-		"PaymentTerms": "0001",
-		"BaseDate": 31,
+		"PaymentTerms": "",
+		"BaseDate": null,
 		"BaseDateCalcAddMonth": null,
 		"BaseDateCalcFixedDate": null,
 		"PaymentDueDateCalcAddMonth": null,
 		"PaymentDueDateCalcFixedDate": null,
-		"PaymentTermsText" :[
+		"CreationDate": "",
+		"LastChangeDate": "",
+		"IsMarkedForDeletion": null,
+		"PaymentTermsText": [
 			{
-			"Language":"JA",
-			"PaymentTermsName":""
+				"Language": "",
+				"PaymentTermsName": "",
+				"CreationDate": "",
+				"LastChangeDate": "",
+				"IsMarkedForDeletion": null
 			}
 		]
 	},
 	"api_schema": "DPFMPaymentTermsReads",
-	"accepter": ["All"],
-	"payment_terms": "",
-	"deleted": false
+	"accepter": [
+		"PaymentTerms"
+	]
 }

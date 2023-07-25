@@ -22,6 +22,9 @@ func ConvertToPaymentTerms(rows *sql.Rows) (*[]PaymentTerms, error) {
 			&pm.BaseDateCalcFixedDate,
 			&pm.PaymentDueDateCalcAddMonth,
 			&pm.PaymentDueDateCalcFixedDate,
+			&pm.CreationDate,
+			&pm.LastChangeDate,
+			&pm.IsMarkedForDeletion,
 		)
 		if err != nil {
 			fmt.Printf("err = %+v \n", err)
@@ -36,6 +39,9 @@ func ConvertToPaymentTerms(rows *sql.Rows) (*[]PaymentTerms, error) {
 			BaseDateCalcFixedDate:       data.BaseDateCalcFixedDate,
 			PaymentDueDateCalcAddMonth:  data.PaymentDueDateCalcAddMonth,
 			PaymentDueDateCalcFixedDate: data.PaymentDueDateCalcFixedDate,
+			CreationDate:				 data.CreationDate,
+			LastChangeDate:				 data.LastChangeDate,
+			IsMarkedForDeletion:		 data.IsMarkedForDeletion,
 		})
 	}
 
@@ -55,6 +61,9 @@ func ConvertToPaymentTermsText(rows *sql.Rows) (*[]PaymentTermsText, error) {
 			&pm.PaymentTerms,
 			&pm.Language,
 			&pm.PaymentTermsName,
+			&pm.CreationDate,
+			&pm.LastChangeDate,
+			&pm.IsMarkedForDeletion,
 		)
 		if err != nil {
 			fmt.Printf("err = %+v \n", err)
@@ -63,44 +72,13 @@ func ConvertToPaymentTermsText(rows *sql.Rows) (*[]PaymentTermsText, error) {
 
 		data := pm
 		paymentTermsText = append(paymentTermsText, PaymentTermsText{
-			PaymentTerms:     data.PaymentTerms,
-			Language:         data.Language,
-			PaymentTermsName: data.PaymentTermsName,
+			PaymentTerms:			data.PaymentTerms,
+			Language:				data.Language,
+			PaymentTermsName:		data.PaymentTermsName,
+			CreationDate:			data.CreationDate,
+			LastChangeDate:			data.LastChangeDate,
+			IsMarkedForDeletion:	data.IsMarkedForDeletion,
 		})
-	}
-
-	return &paymentTermsText, nil
-}
-
-func ConvertToPaymentTermsTexts(rows *sql.Rows) (*[]PaymentTermsText, error) {
-	defer rows.Close()
-	paymentTermsText := make([]PaymentTermsText, 0)
-
-	i := 0
-	for rows.Next() {
-		i++
-		pm := &requests.PaymentTermsTexts{}
-
-		err := rows.Scan(
-			&pm.PaymentTerms,
-			&pm.Language,
-			&pm.PaymentTermsName,
-		)
-		if err != nil {
-			fmt.Printf("err = %+v \n", err)
-			return &paymentTermsText, err
-		}
-
-		data := pm
-		paymentTermsText = append(paymentTermsText, PaymentTermsText{
-			PaymentTerms:     data.PaymentTerms,
-			Language:         data.Language,
-			PaymentTermsName: data.PaymentTermsName,
-		})
-	}
-	if i == 0 {
-		fmt.Printf("DBに対象のレコードが存在しません。")
-		return &paymentTermsText, nil
 	}
 
 	return &paymentTermsText, nil
