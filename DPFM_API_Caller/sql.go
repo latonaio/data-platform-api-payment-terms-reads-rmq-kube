@@ -4,6 +4,7 @@ import (
 	"context"
 	dpfm_api_input_reader "data-platform-api-payment-terms-reads-rmq-kube/DPFM_API_Input_Reader"
 	dpfm_api_output_formatter "data-platform-api-payment-terms-reads-rmq-kube/DPFM_API_Output_Formatter"
+	"fmt"
 	"strings"
 	"sync"
 
@@ -20,38 +21,38 @@ func (c *DPFMAPICaller) readSqlProcess(
 	log *logger.Logger,
 ) interface{} {
 	var paymentTerms *[]dpfm_api_output_formatter.PaymentTerms
-	var paymentTermsText *[]dpfm_api_output_formatter.PaymentTermsText
+	var text *[]dpfm_api_output_formatter.Text
 	for _, fn := range accepter {
 		switch fn {
-		case "SinglePaymentTerms":
+		case "PaymentTerms":
 			func() {
-				paymentTerms = c.SinglePaymentTerms(mtx, input, output, errs, log)
+				paymentTerms = c.PaymentTerms(mtx, input, output, errs, log)
 			}()
-		case "MultiplePaymentTerms":
+		case "PaymentTermses":
 			func() {
-				paymentTerms = c.MultiplePaymentTerms(mtx, input, output, errs, log)
+				paymentTerms = c.PaymentTermses(mtx, input, output, errs, log)
 			}()
-		case "PaymentTermsText":
+		case "Text":
 			func() {
-				paymentTermsText = c.PaymentTermsText(mtx, input, output, errs, log)
+				text = c.Text(mtx, input, output, errs, log)
 			}()
-		case "PaymentTermsTexts":
+		case "Texts":
 			func() {
-				paymentTermsText = c.PaymentTermsTexts(mtx, input, output, errs, log)
+				text = c.Texts(mtx, input, output, errs, log)
 			}()
 		default:
 		}
 	}
 
 	data := &dpfm_api_output_formatter.Message{
-		PaymentTerms:     paymentTerms,
-		PaymentTermsText: paymentTermsText,
+		PaymentTerms: paymentTerms,
+		Text:         text,
 	}
 
 	return data
 }
 
-func (c *DPFMAPICaller) SinglePaymentTerms(
+func (c *DPFMAPICaller) PaymentTerms(
 	mtx *sync.Mutex,
 	input *dpfm_api_input_reader.SDC,
 	output *dpfm_api_output_formatter.SDC,
@@ -84,13 +85,14 @@ func (c *DPFMAPICaller) SinglePaymentTerms(
 	return data
 }
 
-func (c *DPFMAPICaller) MultiplePaymentTerms(
+func (c *DPFMAPICaller) PaymentTermses(
 	mtx *sync.Mutex,
 	input *dpfm_api_input_reader.SDC,
 	output *dpfm_api_output_formatter.SDC,
 	errs *[]error,
 	log *logger.Logger,
 ) *[]dpfm_api_output_formatter.PaymentTerms {
+	where := fmt.Sprintf("WHERE PaymentTerms = '%s'", input.PaymentTerms.PaymentTerms)
 
 	if input.PaymentTerms.IsMarkedForDeletion != nil {
 		where = fmt.Sprintf("%s\nAND IsMarkedForDeletion = %v", where, *input.PaymentTerms.IsMarkedForDeletion)
@@ -116,19 +118,19 @@ func (c *DPFMAPICaller) MultiplePaymentTerms(
 	return data
 }
 
-func (c *DPFMAPICaller) PaymentTermsText(
+func (c *DPFMAPICaller) Text(
 	mtx *sync.Mutex,
 	input *dpfm_api_input_reader.SDC,
 	output *dpfm_api_output_formatter.SDC,
 	errs *[]error,
 	log *logger.Logger,
-) *[]dpfm_api_output_formatter.PaymentTermsText {
+) *[]dpfm_api_output_formatter.Text {
 	var args []interface{}
 	paymentTerms := input.PaymentTerms.PaymentTerms
-	paymentTermsText := input.PaymentTerms.PaymentTermsText
+	text := input.PaymentTerms.Text
 
 	cnt := 0
-	for _, v := range paymentTermsText {
+	for _, v := range text {
 		args = append(args, paymentTerms, v.Language)
 		cnt++
 	}
@@ -145,7 +147,7 @@ func (c *DPFMAPICaller) PaymentTermsText(
 	}
 	defer rows.Close()
 
-	data, err := dpfm_api_output_formatter.ConvertToPaymentTermsText(rows)
+	data, err := dpfm_api_output_formatter.ConvertToText(rows)
 	if err != nil {
 		*errs = append(*errs, err)
 		return nil
@@ -154,18 +156,18 @@ func (c *DPFMAPICaller) PaymentTermsText(
 	return data
 }
 
-func (c *DPFMAPICaller) PaymentTermsTexts(
+func (c *DPFMAPICaller) Texts(
 	mtx *sync.Mutex,
 	input *dpfm_api_input_reader.SDC,
 	output *dpfm_api_output_formatter.SDC,
 	errs *[]error,
 	log *logger.Logger,
-) *[]dpfm_api_output_formatter.PaymentTermsText {
+) *[]dpfm_api_output_formatter.Text {
 	var args []interface{}
-	paymentTermsText := input.PaymentTerms.PaymentTermsText
+	text := input.PaymentTerms.Text
 
 	cnt := 0
-	for _, v := range paymentTermsText {
+	for _, v := range text {
 		args = append(args, v.Language)
 		cnt++
 	}
@@ -183,7 +185,7 @@ func (c *DPFMAPICaller) PaymentTermsTexts(
 	defer rows.Close()
 
 	//
-	data, err := dpfm_api_output_formatter.ConvertToPaymentTermsTexts(rows)
+	data, err := dpfm_api_output_formatter.ConvertToText(rows)
 	if err != nil {
 		*errs = append(*errs, err)
 		return nil

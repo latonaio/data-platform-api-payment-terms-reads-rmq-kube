@@ -103,8 +103,10 @@ func getAccepter(input *dpfm_api_input_reader.SDC) []string {
 
 	if accepter[0] == "All" {
 		accepter = []string{
-			"SinglePaymentTerms", "MultiplePaymentTerms", 
-			"PaymentTermsText", "PaymentTermsTexts",
+			"PaymentTerms",
+			"PaymentTermses", 
+			"Text",
+			"Texts",
 		}
 	}
 	return accepter

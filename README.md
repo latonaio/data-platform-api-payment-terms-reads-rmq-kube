@@ -18,8 +18,8 @@ APIサービス URL: https://xxx.xxx.io/api/API_PAYMENT_TERMS_SRV/reads/
 ## 本レポジトリ に 含まれる API名
 data-platform-api-payment-terms-reads-rmq-kube には、次の API をコールするためのリソースが含まれています。  
 
-* A_PaymentTerms（データ連携基盤 支払条件 - 支払条件データ）
-* A_PaymentTermsText（データ連携基盤 支払条件 - 支払条件テキストデータ）
+* A_PaymentTerms（支払条件 - 支払条件データ）
+* A_Text（支払条件 - テキストデータ）
 
 ## API への 値入力条件 の 初期値
 data-platform-api-payment-terms-reads-rmq-kube において、API への値入力条件の初期値は、入力ファイルレイアウトの種別毎に、次の通りとなっています。  

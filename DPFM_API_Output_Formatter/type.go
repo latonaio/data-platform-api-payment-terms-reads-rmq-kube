@@ -25,8 +25,8 @@ type SDC struct {
 }
 
 type Message struct {
-	PaymentTerms     *[]PaymentTerms     `json:"PaymentTerms"`
-	PaymentTermsText *[]PaymentTermsText `json:"PaymentTermsText"`
+	PaymentTerms     *[]PaymentTerms	`json:"PaymentTerms"`
+	Text			 *[]Text			`json:"Text"`
 }
 
 type PaymentTerms struct {
@@ -41,7 +41,7 @@ type PaymentTerms struct {
 	IsMarkedForDeletion			*bool	`json:"IsMarkedForDeletion"`
 }
 
-type PaymentTermsText struct {
+type Text struct {
 	PaymentTerms		string  `json:"PaymentTerms"`
 	Language			string  `json:"Language"`
 	PaymentTermsName	string	`json:"PaymentTermsName"`

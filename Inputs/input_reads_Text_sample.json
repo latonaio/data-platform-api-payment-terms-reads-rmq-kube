@@ -9,27 +9,15 @@
 	"service_label": "PAYMENT_TERMS",
 	"api_type": "reads",
 	"PaymentTerms": {
-		"PaymentTerms": "",
-		"BaseDate": null,
-		"BaseDateCalcAddMonth": null,
-		"BaseDateCalcFixedDate": null,
-		"PaymentDueDateCalcAddMonth": null,
-		"PaymentDueDateCalcFixedDate": null,
-		"CreationDate": "",
-		"LastChangeDate": "",
-		"IsMarkedForDeletion": null,
+		"PaymentTerms": "0001",
 		"Text": [
 			{
-				"Language": "",
-				"PaymentTermsName": "",
-				"CreationDate": "",
-				"LastChangeDate": "",
-				"IsMarkedForDeletion": null
+				"Language": "JA"
 			}
 		]
 	},
 	"api_schema": "DPFMPaymentTermsReads",
 	"accepter": [
-		"PaymentTerms"
+		"Text"
 	]
 }

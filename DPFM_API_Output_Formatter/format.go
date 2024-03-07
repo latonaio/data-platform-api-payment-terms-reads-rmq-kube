@@ -48,14 +48,14 @@ func ConvertToPaymentTerms(rows *sql.Rows) (*[]PaymentTerms, error) {
 	return &paymentTerms, nil
 }
 
-func ConvertToPaymentTermsText(rows *sql.Rows) (*[]PaymentTermsText, error) {
+func ConvertToText(rows *sql.Rows) (*[]Text, error) {
 	defer rows.Close()
-	paymentTermsText := make([]PaymentTermsText, 0)
+	text := make([]Text, 0)
 
 	i := 0
 	for rows.Next() {
 		i++
-		pm := &requests.PaymentTermsText{}
+		pm := &requests.Text{}
 
 		err := rows.Scan(
 			&pm.PaymentTerms,
@@ -67,11 +67,11 @@ func ConvertToPaymentTermsText(rows *sql.Rows) (*[]PaymentTermsText, error) {
 		)
 		if err != nil {
 			fmt.Printf("err = %+v \n", err)
-			return &paymentTermsText, err
+			return &text, err
 		}
 
 		data := pm
-		paymentTermsText = append(paymentTermsText, PaymentTermsText{
+		text = append(text, Text{
 			PaymentTerms:			data.PaymentTerms,
 			Language:				data.Language,
 			PaymentTermsName:		data.PaymentTermsName,
@@ -81,5 +81,5 @@ func ConvertToPaymentTermsText(rows *sql.Rows) (*[]PaymentTermsText, error) {
 		})
 	}
 
-	return &paymentTermsText, nil
+	return &text, nil
 }
